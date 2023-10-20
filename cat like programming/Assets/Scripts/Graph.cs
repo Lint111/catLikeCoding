@@ -11,6 +11,9 @@ public class Graph : MonoBehaviour
     [SerializeField,Range(10,200)]
     int resulution = 10;
 
+    [SerializeField, Range(0, 2)]
+    int function;
+
     Transform[] points;
 
     private void Awake()
@@ -24,7 +27,6 @@ public class Graph : MonoBehaviour
         {
             Transform p = points[i] = Instantiate(point, transform);
             position.x = (i + 0.5f) * step - 1f;
-            position.y = position.x * position.x * position.x;
             p.localPosition = position;
             p.localScale = scale;
 
@@ -37,7 +39,13 @@ public class Graph : MonoBehaviour
         {
             Transform p = points[i];
             Vector3 position = p.localPosition;
-            position.y = Mathf.Sin(Mathf.PI * (position.x + time));
+            position.y = function switch
+            {
+                0 => FunctionLibrary.Wave(position.x, time),
+                1 => FunctionLibrary.MultiWave(position.x, time),
+                2 => FunctionLibrary.Ripple(position.x, time),
+                _ => 0
+            };
             p.localPosition = position;
         }
     }
