@@ -10,6 +10,14 @@ public static class FunctionLibrary
 
     private static readonly Function[] functions = { Wave, MultiWave, Ripple,Sphere, Torus };
     public static Function GetFunction(FunctionName name) => functions[(int)name];
+    public static FunctionName GetNextFunctionName (FunctionName functionName) => (int)functionName < functions.Length - 1 ? functionName + 1 : 0;
+    public static FunctionName GetRandomFunctionName(FunctionName functionName)
+    {
+        var choice = (FunctionName)Random.Range(1, functions.Length);
+        return choice == functionName ? 0 : choice;
+    }
+    public static Vector3 Morph(float u, float v, float t, Function from, Function to,float progress) => Vector3.LerpUnclamped(from(u,v,t),to(u,v,t), SmoothStep(0f,1f,progress));
+    
     public static Vector3 Wave(float u, float v, float t) => new Vector3(u, Sin(PI * (u + v + t)), v);
     public static Vector3 MultiWave(float u, float v, float t)
     {
